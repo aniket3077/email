@@ -210,7 +210,7 @@ function HomePageComponent({ setCurrentPage }) {
               <div className="flex flex-col rounded-lg border bg-white p-6 shadow-lg dark:bg-gray-950">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-bold">Basic</h3>
-                  <div className="text-4xl font-bold">$4.9</div>
+                  <div className="text-4xl font-bold">400$</div>
                 </div>
                 <p className="mt-2 text-gray-500 dark:text-gray-400">Per month</p>
                 <ul className="mt-6 space-y-2">

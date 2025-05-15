@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { apiService } from "@/lib/api-service"
 import { Check, Loader2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 interface SubscriptionPlan {
   id: string
@@ -111,16 +112,17 @@ export default function SubscriptionPage() {
         {plans.map((plan) => (
           <Card
             key={plan.id}
-            className={`relative ${
+            className={cn(
+              "relative",
               plan.popular ? "border-blue-500 shadow-lg" : ""
-            }`}
+            )}
           >
             {plan.popular && (
-              <Badge
-                className="absolute -top-3 right-4 bg-blue-500"
-              >
-                Most Popular
-              </Badge>
+              <div className="absolute -top-3 right-4">
+                <Badge variant="default" className="bg-blue-500">
+                  Most Popular
+                </Badge>
+              </div>
             )}
             <CardHeader>
               <CardTitle>{plan.name}</CardTitle>
@@ -148,10 +150,10 @@ export default function SubscriptionPage() {
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <>
+                  <React.Fragment>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Processing...
-                  </>
+                  </React.Fragment>
                 ) : (
                   "Subscribe Now"
                 )}

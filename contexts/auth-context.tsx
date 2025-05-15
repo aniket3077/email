@@ -2,77 +2,78 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
+import { activeApiService } from "@/lib/api-config"
 
-// Mock API service for now
-const apiService = {
-  auth: {
-    login: async (email: string, password: string) => {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return {
-        token: "mock-token-12345",
-        user: {
-          id: "1",
-          name: "John Doe",
-          email,
-          credits: 1250,
-          role: "user",
-          token: "mock-token-12345",
-          company: "",
-          phone: "",
-          address: "",
-          city: "",
-          country: "",
-          postalCode: "",
-          vatNumber: "",
-        },
-      }
-    },
-    register: async (name: string, email: string, password: string) => {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return {
-        token: "mock-token-12345",
-        user: {
-          id: "1",
-          name,
-          email,
-          credits: 100,
-          role: "user",
-          token: "mock-token-12345",
-          company: "",
-          phone: "",
-          address: "",
-          city: "",
-          country: "",
-          postalCode: "",
-          vatNumber: "",
-        },
-      }
-    },
-  },
-  user: {
-    getProfile: async (token: string) => {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return {
-        id: "1",
-        name: "John Doe",
-        email: "john@example.com",
-        credits: 1250,
-        role: "user",
-        token,
-        company: "",
-        phone: "",
-        address: "",
-        city: "",
-        country: "",
-        postalCode: "",
-        vatNumber: "",
-      }
-    },
-  },
-}
+// Import the proper API service instead of using a mock
+// const apiService = {
+//   auth: {
+//     login: async (email: string, password: string) => {
+//       // Simulate API call
+//       await new Promise((resolve) => setTimeout(resolve, 1000))
+//       return {
+//         token: "mock-token-12345",
+//         user: {
+//           id: "1",
+//           name: "John Doe",
+//           email,
+//           credits: 1250,
+//           role: "user",
+//           token: "mock-token-12345",
+//           company: "",
+//           phone: "",
+//           address: "",
+//           city: "",
+//           country: "",
+//           postalCode: "",
+//           vatNumber: "",
+//         },
+//       }
+//     },
+//     register: async (name: string, email: string, password: string) => {
+//       // Simulate API call
+//       await new Promise((resolve) => setTimeout(resolve, 1000))
+//       return {
+//         token: "mock-token-12345",
+//         user: {
+//           id: "1",
+//           name,
+//           email,
+//           credits: 100,
+//           role: "user",
+//           token: "mock-token-12345",
+//           company: "",
+//           phone: "",
+//           address: "",
+//           city: "",
+//           country: "",
+//           postalCode: "",
+//           vatNumber: "",
+//         },
+//       }
+//     },
+//   },
+//   user: {
+//     getProfile: async (token: string) => {
+//       // Simulate API call
+//       await new Promise((resolve) => setTimeout(resolve, 1000))
+//       return {
+//         id: "1",
+//         name: "John Doe",
+//         email: "john@example.com",
+//         credits: 1250,
+//         role: "user",
+//         token,
+//         company: "",
+//         phone: "",
+//         address: "",
+//         city: "",
+//         country: "",
+//         postalCode: "",
+//         vatNumber: "",
+//       }
+//     },
+//   },
+// }
 
 interface User {
   id: string
@@ -140,9 +141,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (storedData) {
           // Verify token validity with backend
           try {
-            const userData = await apiService.user.getProfile(storedData.token)
+            const userData = await activeApiService.user.getProfile(storedData.token)
             setUser(userData)
             setToken(storedData.token)
+            
+            // Check if the user was on the admin page before refresh
+            const currentPath = window.location.pathname;
+            if (userData.role === 'admin' && currentPath.startsWith('/admin')) {
+              // If we're already on an admin page and the user is an admin, stay there
+              // Do nothing - let the current admin page handle the rendering
+            } else if (currentPath === '/login') {
+              // If we're on the login page but already authenticated
+              if (userData.role === 'admin') {
+                router.push('/admin');
+              } else {
+                router.push('/dashboard');
+              }
+            }
           } catch (error) {
             // If token is invalid, clear stored data
             console.error("Invalid token:", error)
@@ -167,11 +182,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     setIsLoading(true)
     try {
-      const response = await apiService.auth.login(email, password)
+      const response = await activeApiService.auth.login(email, password)
+      
+      // Ensure the user object has a properly set role
+      const userData = {
+        ...response.user,
+        role: response.user.role || 'user' // Default to 'user' if role is missing
+      };
+      
       setToken(response.token)
-      setUser(response.user)
-      storeAuthData({ user: response.user, token: response.token })
-      router.push("/dashboard")
+      setUser(userData)
+      
+      // Store the auth data with the explicit role
+      storeAuthData({ 
+        user: userData, 
+        token: response.token 
+      })
+      
+      // Redirect based on user role
+      if (userData.role === 'admin') {
+        router.push("/admin")
+      } else {
+        router.push("/dashboard")
+      }
     } catch (error) {
       console.error("Login failed:", error)
       throw error
@@ -183,7 +216,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (name: string, email: string, password: string) => {
     setIsLoading(true)
     try {
-      const response = await apiService.auth.register(name, email, password)
+      const response = await activeApiService.auth.register(name, email, password)
       setToken(response.token)
       setUser(response.user)
       storeAuthData({ user: response.user, token: response.token })
