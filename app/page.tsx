@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, FormEvent, ChangeEvent } from "react"
 import { Inter } from "next/font/google"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -23,6 +23,7 @@ import {
   Shield,
   X,
 } from "lucide-react"
+import { Home as HomeIcon } from "lucide-react"
 
 // Import UI components
 import { Button } from "@/components/ui/button"
@@ -64,6 +65,11 @@ export default function Home() {
   )
 }
 
+// Define types
+interface NavigationProps {
+  setCurrentPage: (page: string) => void;
+}
+
 function EmailVerificationApp() {
   const [currentPage, setCurrentPage] = useState("home")
   const router = useRouter()
@@ -92,7 +98,7 @@ function EmailVerificationApp() {
   )
 }
 
-function HomePageComponent({ setCurrentPage }) {
+function HomePageComponent({ setCurrentPage }: NavigationProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="px-4 lg:px-6 h-14 flex items-center">
@@ -281,12 +287,12 @@ function HomePageComponent({ setCurrentPage }) {
 }
 
 // Login Page Component
-function LoginPage({ setCurrentPage }) {
+function LoginPage({ setCurrentPage }: NavigationProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // In a real app, you would connect to your backend API here
     console.log("Login with:", { email, password })
@@ -380,12 +386,12 @@ function LoginPage({ setCurrentPage }) {
 }
 
 // Signup Page Component
-function SignupPage({ setCurrentPage }) {
+function SignupPage({ setCurrentPage }: NavigationProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // In a real app, you would connect to your backend API here
     console.log("Signup with:", { email, password })
@@ -497,7 +503,7 @@ function SignupPage({ setCurrentPage }) {
 }
 
 // Dashboard Page Component
-function DashboardPage({ setCurrentPage }) {
+function DashboardPage({ setCurrentPage }: NavigationProps) {
   const [dashboardTab, setDashboardTab] = useState("main")
 
   // Render the appropriate dashboard sub-page
@@ -522,7 +528,7 @@ function DashboardPage({ setCurrentPage }) {
 
   // Navigation items for sidebar
   const navItems = [
-    { href: "#", label: "Home", icon: Home, page: "main" },
+    { href: "#", label: "Home", icon: HomeIcon, page: "main" },
     { href: "#", label: "List Items", icon: List, page: "list-items" },
     { href: "#", label: "Verifications", icon: CheckCircle, page: "verifications" },
     { href: "#", label: "Credits", icon: CreditCard, page: "credits" },
@@ -883,7 +889,7 @@ function ProfilePage() {
     preferredCurrency: "enter lamark",
   })
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: string, value: string) => {
     setUser({ ...user, [field]: value })
   }
 
@@ -1504,11 +1510,11 @@ function AddSubuserPage() {
     accountType: "isolated",
   })
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // In a real app, you would connect to your backend API here
     console.log("Adding subuser:", formData)
