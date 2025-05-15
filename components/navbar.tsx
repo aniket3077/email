@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import AnimatedLogo from "@/components/ui/animated-logo"
 import { useAuth } from "@/contexts/auth-context"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
   const { isAuthenticated, user } = useAuth()
 
@@ -18,6 +20,15 @@ export default function Navbar() {
     setIsOpen(false)
   }, [pathname])
 
+  // Add scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   // Don't show navbar on dashboard pages
   if (pathname.startsWith("/dashboard")) {
     return null
@@ -25,39 +36,33 @@ export default function Navbar() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/features", label: "Features" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
+    { href: "#features", label: "Features" },
+    { href: "#pricing", label: "Pricing" },
   ]
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={`sticky top-0 z-40 w-full transition-all duration-200 ${isScrolled ? 'bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 shadow-sm' : 'bg-transparent'}`}>
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center">
-          <Link href="/" className="flex items-center">
-            <motion.img
-              src="/images/logo.png"
-              alt="EmailVerify Logo"
-              className="h-8 w-auto"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            />
-            <span className="ml-2 text-lg font-semibold">EmailVerify</span>
-          </Link>
+          <AnimatedLogo size="md" />
 
-          <nav className="hidden md:flex ml-10 space-x-4">
+          <nav className="hidden md:flex ml-10 space-x-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  pathname === item.href
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                }`}
               >
-                {item.label}
+                <motion.div
+                  className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                    pathname === item.href
+                      ? "bg-sky-50 text-sky-600"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-sky-50"
+                  }`}
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  {item.label}
+                </motion.div>
               </Link>
             ))}
           </nav>
@@ -65,16 +70,16 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center space-x-4">
           {isAuthenticated ? (
-            <Button asChild>
+            <Button asChild className="rounded-full px-5" size="sm">
               <Link href="/dashboard">Dashboard</Link>
             </Button>
           ) : (
             <>
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" asChild className="rounded-full">
                 <Link href="/login">Sign in</Link>
               </Button>
-              <Button asChild>
-                <Link href="/signup">Sign up</Link>
+              <Button asChild className="rounded-full bg-sky-600 hover:bg-sky-700">
+                <Link href="/signup">Get Started</Link>
               </Button>
             </>
           )}
@@ -104,13 +109,10 @@ export default function Navbar() {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.3, type: "spring", damping: 25 }}
             >
               <div className="flex items-center justify-between p-4 border-b">
-                <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-                  <img src="/images/logo.png" alt="EmailVerify Logo" className="h-8 w-auto" />
-                  <span className="ml-2 text-lg font-semibold">EmailVerify</span>
-                </Link>
+                <AnimatedLogo size="sm" />
                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="h-5 w-5" />
                   <span className="sr-only">Close menu</span>
@@ -121,33 +123,38 @@ export default function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                      pathname === item.href
-                        ? "bg-blue-50 text-blue-600"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                    }`}
                     onClick={() => setIsOpen(false)}
                   >
-                    {item.label}
+                    <motion.div
+                      className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                        pathname === item.href
+                          ? "bg-sky-50 text-sky-600"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      }`}
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      {item.label}
+                    </motion.div>
                   </Link>
                 ))}
                 <div className="pt-4 mt-4 border-t space-y-2">
                   {isAuthenticated ? (
-                    <Button className="w-full" asChild>
+                    <Button className="w-full rounded-full bg-sky-600 hover:bg-sky-700" asChild>
                       <Link href="/dashboard" onClick={() => setIsOpen(false)}>
                         Dashboard
                       </Link>
                     </Button>
                   ) : (
                     <>
-                      <Button variant="outline" className="w-full" asChild>
+                      <Button variant="outline" className="w-full rounded-full" asChild>
                         <Link href="/login" onClick={() => setIsOpen(false)}>
                           Sign in
                         </Link>
                       </Button>
-                      <Button className="w-full" asChild>
+                      <Button className="w-full rounded-full bg-sky-600 hover:bg-sky-700" asChild>
                         <Link href="/signup" onClick={() => setIsOpen(false)}>
-                          Sign up
+                          Get Started
                         </Link>
                       </Button>
                     </>

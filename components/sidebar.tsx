@@ -22,8 +22,8 @@ export default function Sidebar() {
       <div className="flex-1">
         <div className="mb-8">
           <Link href="/dashboard" className="flex items-center">
-            <img src="/images/logo.png" alt="Logo" className="h-8 w-auto" />
-            <span className="ml-2 text-lg font-semibold">EmailVerify</span>
+            <img src="/images/logo.png" alt="Sphurti Logo" className="h-8 w-auto" />
+            <span className="ml-2 text-lg font-semibold">Sphurti</span>
           </Link>
         </div>
         <nav className="space-y-2">

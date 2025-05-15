@@ -184,10 +184,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await activeApiService.auth.login(email, password)
       
-      // Ensure the user object has a properly set role
+      // Check if response has user data
+      if (!response || !response.user) {
+        throw new Error("Invalid response from authentication service");
+      }
+      
+      // Ensure the user object has a properly set role and token
       const userData = {
         ...response.user,
-        role: response.user.role || 'user' // Default to 'user' if role is missing
+        role: response.user.role || 'user', // Default to 'user' if role is missing
+        token: response.token // Make sure token is also in the user object
       };
       
       setToken(response.token)
@@ -205,9 +211,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         router.push("/dashboard")
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login failed:", error)
-      throw error
+      // Check for specific error types and format them appropriately
+      if (error.status) {
+        // This is a formatted API error
+        throw error;
+      } else if (error.message) {
+        // This is a regular Error object
+        throw {
+          status: 500,
+          message: error.message,
+          data: { message: error.message }
+        };
+      } else {
+        // This is an unknown error format
+        throw {
+          status: 500,
+          message: "An unexpected error occurred during login",
+          data: { message: "An unexpected error occurred during login" }
+        };
+      }
     } finally {
       setIsLoading(false)
     }

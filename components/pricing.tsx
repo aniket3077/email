@@ -17,7 +17,7 @@ export default function Pricing() {
       features: ["100 email verifications/month", "Basic API access", "Email support", "Standard verification speed"],
       highlight: false,
       buttonText: "Start Free",
-      buttonLink: "/signup?plan=free",
+      buttonLink: "/signup",
     },
     {
       title: "Pro",
@@ -33,7 +33,7 @@ export default function Pricing() {
       ],
       highlight: true,
       buttonText: "Start Pro Trial",
-      buttonLink: "/signup?plan=pro",
+      buttonLink: "/signup",
     },
     {
       title: "Enterprise",
@@ -50,7 +50,7 @@ export default function Pricing() {
       ],
       highlight: false,
       buttonText: "Contact Sales",
-      buttonLink: "/contact",
+      buttonLink: "/signup",
     },
   ]
 
@@ -73,12 +73,12 @@ export default function Pricing() {
               <motion.div whileHover={{ y: -10 }} transition={{ type: "spring", stiffness: 300 }}>
                 <Card
                   className={`flex flex-col h-full ${
-                    plan.highlight ? "border-blue-500 shadow-lg relative overflow-hidden" : ""
+                    plan.highlight ? "border-sky-200 shadow-lg relative overflow-hidden" : ""
                   }`}
                 >
                   {plan.highlight && (
                     <div className="absolute top-0 right-0">
-                      <div className="bg-blue-500 text-white text-xs font-bold px-3 py-1 transform rotate-45 translate-x-2 -translate-y-1 shadow-md">
+                      <div className="bg-sky-600 text-white text-xs font-bold px-3 py-1 transform rotate-45 translate-x-2 -translate-y-1 shadow-md">
                         Popular
                       </div>
                     </div>
@@ -106,7 +106,7 @@ export default function Pricing() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.3 + i * 0.1 }}
                         >
-                          <Check className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
+                          <Check className="h-5 w-5 text-sky-600 mr-2 flex-shrink-0" />
                           <span className="text-gray-600 text-sm">{feature}</span>
                         </motion.li>
                       ))}
@@ -114,7 +114,7 @@ export default function Pricing() {
                   </CardContent>
                   <CardFooter className="pt-4">
                     <AnimatedButton
-                      className={`w-full ${plan.highlight ? "bg-blue-500 hover:bg-blue-600" : ""}`}
+                      className={`w-full ${plan.highlight ? "bg-sky-600 hover:bg-sky-700" : ""}`}
                       asChild
                     >
                       <Link href={plan.buttonLink}>{plan.buttonText}</Link>

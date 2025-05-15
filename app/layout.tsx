@@ -8,7 +8,7 @@ import { AuthProvider } from "@/contexts/auth-context"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "EmailVerify - Email Verification Service",
+  title: "Sphurti - Email Verification Service",
   description:
     "Verify your email lists with our powerful service to improve deliverability and protect your sender reputation.",
   generator: 'v0.dev'

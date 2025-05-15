@@ -35,7 +35,7 @@ export default function Footer() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 + j * 0.05 }}
                     >
-                      <Link href="#" className="text-gray-500 hover:text-blue-600 text-sm">
+                      <Link href="#" className="text-gray-500 hover:text-sky-600 text-sm">
                         {link}
                       </Link>
                     </motion.li>
@@ -54,8 +54,8 @@ export default function Footer() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <img src="/images/logo.png" alt="EmailVerify Logo" className="h-8 w-auto mr-2" />
-              <p className="text-sm text-gray-500">© 2025 EmailVerify. All rights reserved.</p>
+              <img src="/images/logo.png" alt="Sphurti Logo" className="h-8 w-auto mr-2" />
+              <p className="text-sm text-gray-500">© 2025 Sphurti. All rights reserved.</p>
             </motion.div>
             <motion.div
               className="flex space-x-4"
@@ -67,7 +67,7 @@ export default function Footer() {
                 <Link
                   key={social}
                   href="#"
-                  className="text-gray-400 hover:text-blue-600 transition-colors duration-200 text-sm"
+                  className="text-gray-400 hover:text-sky-600 transition-colors duration-200 text-sm"
                 >
                   {social}
                 </Link>

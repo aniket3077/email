@@ -27,7 +27,12 @@ export const devApiService = {
       
       // Simple validation - accept any login with valid email format
       if (!email.includes('@') || password.length < 6) {
-        throw { status: 401, statusText: 'Unauthorized', data: { message: 'Invalid credentials' } };
+        throw { 
+          status: 401, 
+          statusText: 'Unauthorized', 
+          message: 'Invalid credentials',
+          data: { message: 'Invalid email or password' } 
+        };
       }
       
       // Demo user for testing
