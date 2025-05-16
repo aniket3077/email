@@ -20,7 +20,7 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
   },
 }
 
