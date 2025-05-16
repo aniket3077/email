@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "next build",
-  "devCommand": "next dev",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "regions": ["iad1"],
@@ -43,16 +43,11 @@
       ]
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ],
   "builds": [
     {
       "src": "next.config.js",
       "use": "@vercel/next"
     }
-  ]
+  ],
+  "installCommand": "npm install --legacy-peer-deps"
 } 
