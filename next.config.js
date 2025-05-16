@@ -7,7 +7,20 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    domains: ['vercel.com'],
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
+  swcMinify: true,
+  reactStrictMode: true,
+  poweredByHeader: false,
+  experimental: {
+    optimizeCss: true,
   },
 }
 

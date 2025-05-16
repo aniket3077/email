@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Save, RefreshCw, Mail, Globe, Lock, BellRing, Database, Server } from "lucide-react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Save, Mail, Globe, Lock, BellRing, Database, Server } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -82,12 +82,12 @@ export default function AdminSettingsPage() {
     setGeneralSettings(prev => ({ ...prev, [name]: value }))
   }
   
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setEmailSettings(prev => ({ ...prev, [name]: value }))
   }
   
-  const handleSecurityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSecurityChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setSecuritySettings(prev => ({ ...prev, [name]: value }))
   }
@@ -99,19 +99,19 @@ export default function AdminSettingsPage() {
   
   // Toggle switch handlers
   const toggleEmailSetting = (name: string) => {
-    setEmailSettings(prev => ({ ...prev, [name]: !prev[name as keyof typeof prev] }))
+    setEmailSettings(prev => ({ ...prev, [name as keyof typeof prev]: !prev[name as keyof typeof prev] }))
   }
   
   const toggleSecuritySetting = (name: string) => {
-    setSecuritySettings(prev => ({ ...prev, [name]: !prev[name as keyof typeof prev] }))
+    setSecuritySettings(prev => ({ ...prev, [name as keyof typeof prev]: !prev[name as keyof typeof prev] }))
   }
   
   const toggleApiSetting = (name: string) => {
-    setApiSettings(prev => ({ ...prev, [name]: !prev[name as keyof typeof prev] }))
+    setApiSettings(prev => ({ ...prev, [name as keyof typeof prev]: !prev[name as keyof typeof prev] }))
   }
   
   const toggleNotificationSetting = (name: string) => {
-    setNotificationSettings(prev => ({ ...prev, [name]: !prev[name as keyof typeof prev] }))
+    setNotificationSettings(prev => ({ ...prev, [name as keyof typeof prev]: !prev[name as keyof typeof prev] }))
   }
   
   // Save settings
@@ -143,34 +143,64 @@ export default function AdminSettingsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">System Settings</h1>
-        <Button onClick={saveSettings} disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="mr-2 h-4 w-4" />
-              Save Changes
-            </>
-          )}
+        <h1 className="text-3xl font-semibold">System Settings</h1>
+        <Button 
+          onClick={saveSettings} 
+          disabled={isLoading}
+          className="bg-[#26a69a] hover:bg-[#219389] gap-2"
+        >
+          <Save className="h-4 w-4" />
+          Save Changes
         </Button>
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-5 w-full">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="email">Email</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="api">API</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+        <TabsList className="bg-blue-50/50 p-1 rounded-md">
+          <TabsTrigger 
+            value="general" 
+            className={`rounded-md px-4 py-2 ${activeTab === 'general' 
+              ? 'bg-white shadow-sm' 
+              : 'hover:bg-blue-50 text-gray-600'}`}
+          >
+            General
+          </TabsTrigger>
+          <TabsTrigger 
+            value="email" 
+            className={`rounded-md px-4 py-2 ${activeTab === 'email' 
+              ? 'bg-white shadow-sm' 
+              : 'hover:bg-blue-50 text-gray-600'}`}
+          >
+            Email
+          </TabsTrigger>
+          <TabsTrigger 
+            value="security" 
+            className={`rounded-md px-4 py-2 ${activeTab === 'security' 
+              ? 'bg-white shadow-sm' 
+              : 'hover:bg-blue-50 text-gray-600'}`}
+          >
+            Security
+          </TabsTrigger>
+          <TabsTrigger 
+            value="api" 
+            className={`rounded-md px-4 py-2 ${activeTab === 'api' 
+              ? 'bg-white shadow-sm' 
+              : 'hover:bg-blue-50 text-gray-600'}`}
+          >
+            API
+          </TabsTrigger>
+          <TabsTrigger 
+            value="notifications" 
+            className={`rounded-md px-4 py-2 ${activeTab === 'notifications' 
+              ? 'bg-white shadow-sm' 
+              : 'hover:bg-blue-50 text-gray-600'}`}
+          >
+            Notifications
+          </TabsTrigger>
         </TabsList>
         
         {/* General Settings */}
         <TabsContent value="general" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle>General Settings</CardTitle>
               <CardDescription>
@@ -249,22 +279,22 @@ export default function AdminSettingsPage() {
                       <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
                       <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
                       <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
-                      <SelectItem value="MMM D, YYYY">MMM D, YYYY</SelectItem>
-                      <SelectItem value="D MMM YYYY">D MMM YYYY</SelectItem>
+                      <SelectItem value="DD.MM.YYYY">DD.MM.YYYY</SelectItem>
+                      <SelectItem value="YYYY/MM/DD">YYYY/MM/DD</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="companyAddress">Company Address</Label>
-                <Textarea
-                  id="companyAddress"
-                  name="companyAddress"
-                  value={generalSettings.companyAddress}
-                  onChange={handleGeneralChange}
-                  rows={3}
-                />
+
+                <div className="col-span-2 space-y-2">
+                  <Label htmlFor="companyAddress">Company Address</Label>
+                  <Textarea
+                    id="companyAddress"
+                    name="companyAddress"
+                    value={generalSettings.companyAddress}
+                    onChange={handleGeneralChange}
+                    rows={3}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -272,7 +302,7 @@ export default function AdminSettingsPage() {
         
         {/* Email Settings */}
         <TabsContent value="email" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Mail className="h-5 w-5 mr-2" />
@@ -369,7 +399,7 @@ export default function AdminSettingsPage() {
         
         {/* Security Settings */}
         <TabsContent value="security" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Lock className="h-5 w-5 mr-2" />
@@ -471,7 +501,7 @@ export default function AdminSettingsPage() {
         
         {/* API Settings */}
         <TabsContent value="api" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Server className="h-5 w-5 mr-2" />
@@ -574,7 +604,7 @@ export default function AdminSettingsPage() {
         
         {/* Notification Settings */}
         <TabsContent value="notifications" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <BellRing className="h-5 w-5 mr-2" />
