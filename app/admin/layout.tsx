@@ -132,9 +132,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               whileTap={{ scale: 0.98 }}
             >
               <img
-                src="/images/logo.png"
+                src="/images/logo-v1.svg"
                 alt="Sphurti Admin"
-                className="h-8 w-auto"
+                className="h-8 w-auto object-contain"
+                width={150}
+                height={40}
               />
               <span className="ml-2 font-semibold text-gray-800">Sphurti</span>
             </motion.div>
@@ -218,7 +220,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       >
         <div className="p-4 border-b flex items-center justify-between">
           <Link href="/admin" className="flex items-center">
-            <img src="/images/logo.png" alt="Sphurti Admin" className="h-8 w-auto" />
+            <img
+              src="/images/logo-v1.svg"
+              alt="Sphurti Admin"
+              className="h-8 w-auto object-contain"
+              width={150}
+              height={40}
+            />
             <span className="ml-2 text-lg font-semibold">Sphurti Admin</span>
           </Link>
           <Button variant="ghost" size="sm" className="p-1" onClick={() => setIsMobileMenuOpen(false)}>
