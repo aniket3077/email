@@ -123,7 +123,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               whileTap={{ scale: 0.98 }}
             >
               <img
-                src="/images/logo-v1.svg"
+                src="https://sphurti.vercel.app/images/logo-v1.png"
                 alt="Sphurti"
                 className="h-8 w-auto object-contain"
                 width={150}
@@ -227,7 +227,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="p-4 border-b flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center">
             <img 
-              src="/images/logo-v1.svg" 
+              src="https://sphurti.vercel.app/images/logo-v1.png" 
               alt="Sphurti" 
               className="h-8 w-auto object-contain" 
               width={150}

@@ -132,7 +132,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               whileTap={{ scale: 0.98 }}
             >
               <img
-                src="/images/logo-v1.svg"
+                src="https://sphurti.vercel.app/images/logo-v1.png"
                 alt="Sphurti Admin"
                 className="h-8 w-auto object-contain"
                 width={150}
@@ -221,7 +221,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="p-4 border-b flex items-center justify-between">
           <Link href="/admin" className="flex items-center">
             <img
-              src="/images/logo-v1.svg"
+              src="https://sphurti.vercel.app/images/logo-v1.png"
               alt="Sphurti Admin"
               className="h-8 w-auto object-contain"
               width={150}
